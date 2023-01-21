@@ -9,7 +9,5 @@ const Elements = {
     header.textContent = textContent;
     return header;
   },
-
-  
 };
 export default Elements;
