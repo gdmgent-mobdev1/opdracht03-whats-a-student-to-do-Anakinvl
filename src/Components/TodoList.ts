@@ -1,7 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
+import {
+  collection, getDocs, doc as firestoreDoc, setDoc,
+} from 'firebase/firestore';
+import { fireStoreDb, deleteTodoListFirebase } from '../lib/firebase-init';
+import { dragoverHandler, dropHandler } from '../lib/dragAndDrop';
 
-import { dragoverHandler, dropHandler } from '../Lib/dragAndDrop';
-import { addTodoFirebase, deleteTodoListFirebase } from '../lib/firebase-init';
 // eslint-disable-next-line import/no-cycle
 import Card from './Card';
 
@@ -26,20 +29,69 @@ export default class TodoList {
 
   id: string;
 
-  constructor(place: HTMLElement, title = 'to-do list', id = `_${uuidv4()}`) {
+  userId: string;
+
+  cardsCollection: ReturnType<typeof collection>;
+
+  constructor(place: HTMLElement, userId: string, title = 'to-do list', id = `_${uuidv4()}`) {
     this.id = id;
     this.place = place;
+    this.userId = userId;
     this.title = title;
     this.cardArray = [];
     this.id = id;
+    this.cardsCollection = collection(fireStoreDb, 'cards'); // Update with the correct collection path
+    this.fetchAndDisplayCards(); // Fetch and display cards when creating a new TodoList
     this.render();
+  }
+
+  async fetchAndDisplayCards() {
+    const cardsData = await this.fetchCardsFromFirestore();
+    cardsData.forEach((cardData) => {
+      const newCard = new Card(cardData.text, this.div!, this, cardData.id, this.userId);
+      this.cardArray.push(newCard);
+    });
+  }
+
+  async fetchCardsFromFirestore() {
+    const cardsSnapshot = await getDocs(this.cardsCollection);
+    const cardsData = cardsSnapshot.docs.map((doc) => {
+      const cardData = doc.data();
+      return {
+        id: doc.id,
+        text: cardData.text,
+      };
+    });
+
+    return cardsData;
   }
 
   async addToDo() {
     if (this.input instanceof HTMLInputElement && this.div instanceof HTMLDivElement) {
-      const text = this.input.value;
-      const cardId = await addTodoFirebase(text, this.id);
-      const newCard = new Card(text, this.div, this, cardId, this.id);
+      const beschrijving = prompt('Enter Beschrijving:'); // Get Beschrijving from user input
+      const deadline = prompt('Enter Deadline:'); // Get Deadline from user input
+      const checklist = prompt('Enter Checklist:'); // Get Checklist from user input
+      const ledenDeelnemers = prompt('Enter Leden/deelnemers:'); // Get Leden/deelnemers from user input
+      const gespendeerdeTijd = prompt('Enter Gespendeerde tijd:'); // Get Gespendeerde tijd from user input
+
+      const todoId = uuidv4(); // Generate a unique ID for the todo
+      const todoData = {
+        text: this.input.value,
+        beschrijving,
+        deadline,
+        checklist,
+        ledenDeelnemers,
+        gespendeerdeTijd,
+      };
+
+      // Reference the specific project's todos collection
+      const projectTodosCollectionRef = collection(fireStoreDb, `users/${this.userId}/projects/${this.id}/todos`);
+
+      // Add the todo directly under the project's todos collection
+      const todoDocRef = firestoreDoc(projectTodosCollectionRef, todoId);
+      await setDoc(todoDocRef, todoData);
+
+      const newCard = new Card(this.input.value, this.div, this, todoId, this.userId);
       this.cardArray.push(newCard);
     }
   }

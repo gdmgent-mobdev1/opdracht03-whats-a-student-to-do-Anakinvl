@@ -1,4 +1,4 @@
-import { Property } from '../Lib';
+import { Property } from '../lib';
 // eslint-disable-next-line import/no-cycle
 import Card from './Card';
 
@@ -64,15 +64,19 @@ export default class EditableText {
 
     this.saveButton.addEventListener('click', () => {
       console.log(this);
-      if (this.input instanceof HTMLTextAreaElement || this.input instanceof HTMLInputElement)
-      { this.text = this.input.value; }
-      if (this.property === 'description' && (this.input != null)) {
+      if (this.input instanceof HTMLTextAreaElement || this.input instanceof HTMLInputElement) {
+        this.text = this.input.value;
+      }
+
+      if (this.property === 'description' && this.input != null) {
         this.card.state.description = this.input.value;
       }
-      if (this.property === 'text' && (this.input != null) && (this.card.p != null)) {
+
+      if (this.property === 'text' && this.input != null && this.card.p != null) {
         this.card.p.innerText = this.input.value;
         this.card.state.text = this.input.value;
       }
+
       this.div?.remove();
       this.render();
     });

@@ -8,6 +8,25 @@
     <link rel="stylesheet" href="./src/css/style.css">
   </head>
   <body>
+
+    <!-- Registration Form -->
+<div id="registration-form">
+  <button id="register-button">Register</button>
+  <input type="email" id="registration-email" placeholder="Email">
+  <input type="password" id="registration-password" placeholder="Password">
+  
+</div>
+
+<!-- Login Form -->
+<div id="login-form">
+  <input type="email" id="login-email" placeholder="Email">
+  <input type="password" id="login-password" placeholder="Password">
+  <button id="login-button">Login</button>
+</div>
+<button id="google-auth-button">Sign in with Google</button>
+
+<button id="logout-button" style="display: none;">Logout</button>
+<div id="project-container"></div>
     <div id="addTodoListDiv">
         <input type="text" id="addTodoListInput" class="comment">
         <button id="addTodoListButton" class="btn-save">Add list</button>
@@ -15,13 +34,32 @@
     <div class="container_timer">
       <div class="display_timer">
         00 : 00 : 00 : 000
-     </div>
-     <div class="buttons_timer">
-      <button id="pause-timer">Pause</button>
-      <button id="start-timer">Start</button>
-      <button id="reset-timer">Reset</button>
+      </div>
+      <div class="buttons_timer">
+        <input type="number" id="target-time-input" placeholder="Set time (minutes)">
+        <button id="start-timer">Start</button>
+        <button id="pause-timer">Pause</button>
+        <button id="reset-timer">Reset</button>
+      </div>
     </div>
-    </div>
+<table>
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Loop through leaderboardData and display each user's score -->
+    <tr v-for="(user, index) in leaderboardData" :key="user.userId">
+      <td>{{ user.userId }}</td>
+      <td>{{ user.score }}</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
     <div id="app"></div>
     <script defer type="module" src="/src/app.ts"></script>
   </body>

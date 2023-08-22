@@ -232,32 +232,37 @@ body{
   transform: rotate(180deg);
 }
 
-.container_timer{
+.container_timer {
   background-color: #ffffff;
   width: 40%;
-  min-width: 500px;
+  max-width: 500px; /* Adjust maximum width as needed */
   position: absolute;
-  transform: translate(-50%,-50%);
-  top: 50%;
+  transform: translate(-50%, -50%);
+  top: 70%; /* Adjust the top position */
   left: 50%;
   padding: 20px 0;
   padding-bottom: 50px;
   border-radius: 10px;
+  z-index: 1000;
 }
 
-.display_timer{
-   position: relative;
-    width: 92%;
-    background: #ffffff;
-    left: 4%;
-    padding: 40px 0;
-    color: #0381bb;
-    font-size: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    border-radius: 5px;
-    box-shadow: 0 0 20px rgba(0,139,253,0.25);
+.display_timer {
+  position: relative;
+  width: 90%; /* Adjust width for better fit */
+  background: #ffffff;
+  left: 5%; /* Adjust the left position */
+  padding: 40px 0;
+  color: #0381bb;
+  font-size: 40px;
+  text-align: center; /* Center the text */
+  border-radius: 5px;
+  box-shadow: 0 0 20px rgba(0, 139, 253, 0.25);
+  z-index: 1001; /* Higher z-index to be above the container */
+}
+
+#project-container {
+  position: relative;
+  z-index: 1000;
 }
 
 .buttons_timer{

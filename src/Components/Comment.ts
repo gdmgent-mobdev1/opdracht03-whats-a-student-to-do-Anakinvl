@@ -1,6 +1,8 @@
 /* eslint-disable import/no-cycle */
 import { v4 as uuidv4 } from 'uuid';
+import { doc, updateDoc } from 'firebase/firestore';
 import Card from './Card';
+import { fireStoreDb } from '../lib/firebase-init';
 
 export default class Comment {
   title: string;
@@ -19,6 +21,15 @@ export default class Comment {
     this.card = card;
     this.id = uuidv4();
     this.render();
+  }
+
+  async saveCommentChanges() {
+    const cardDocRef = doc(fireStoreDb, 'cards', this.card.id);
+    const updatedComments = this.card.state.comments || [];
+
+    await updateDoc(cardDocRef, {
+      comments: updatedComments,
+    });
   }
 
   render(): void {

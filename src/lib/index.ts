@@ -1,9 +1,10 @@
 const root = document.getElementById('app') as HTMLElement;
 interface State {
   id: string,
-  title: string
-  description: string
-  comments?: string[]
+  title: string,
+  description: string,
+  comments?: string[],
+  text: string
 }
 
 type Property = keyof State;
